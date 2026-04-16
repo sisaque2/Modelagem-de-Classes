@@ -1,85 +1,146 @@
-***Aluno***
-RF01, RF04, RF05, RF06, RF10
-- idAluno
-- nome
-- cpf
-- email
-- telefone
-- endereco
-- rfid
-- status
+@startuml
 
-***Plano***
-RF01, RF02, RF04
-- idPlano
-- nome
-- tipo
-- valor
-- ativo
+class Aluno {
+ - idAluno: 
+ - nome: 
+ - cpf: 
+ - email: 
+ - telefone: 
+ - endereco: 
+ - rfid: 
+ - status: 
+  
+ - contratarPlano(): 
+ - visualizarHorarios(): 
+ - agendarAula(): 
+ - cancelarAgendamento(): 
+ - atualizarStatus(): 
+ - registrarAcesso(): 
+ - receberNotificacao(): 
+}
 
-***Pagamento***
-RF03, RF04, RF09
-- idPagamento
-- data
-- valor
-- formaPagamento
-- status
+class Plano {
+ - idPlano: 
+ - nome: 
+ - tipo: 
+ - valor: 
+ - ativo: 
+  
+ - criar(): 
+ - editar(): 
+ - ativar(): 
+ - desativar(): 
+}
 
-***Acesso***
-RF05, RF09
-- idAcesso
-- dataHora
-- autorizado
+class Pagamento {
+ - idPagamento: 
+ - data: 
+ - valor: 
+ - formaPagamento: 
+ - status: 
+  
+ - registrar():
+ - confirmar():
+ - cancelar():
+}
 
-***Aula***
-RF06, RF07, RF09
-- idAula
-- nome
-- horario
-- capacidadeMaxima
+class Acesso {
+ - idAcesso: 
+ - dataHora: 
+ - autorizado: 
+  
+ - validarEntrada(): 
+}
 
-***Agendamento***
-RF06, RF10
-- idAgendamento
-- dataReserva
-- status
+class Aula {
+ - idAula: 
+ - nome: 
+ - horario: 
+ - capacidadeMaxima: 
+  
+ - verificarVagas(): 
+}
 
-***Presenca***
-RF07
-- idPresenca
-- data
-- presente
+class Agendamento {
+ - idAgendamento: 
+ - dataReserva: 
+ - status: 
+  
+ - confirmar(): 
+ - cancelar(): 
+}
 
-***AvaliacaoFisica***
-RF08, RF10
-- idAvaliacao
-- data
-- peso
-- imc
-- percentualGordura
-- observacoes
-- anexo
+class Presenca {
+ - idPresenca: 
+ - data: 
+ - presente: 
+  
+ - registrar(): 
+}
 
-***Notificaca***
-RF10
-- idNotificacao
-- tipo
-- dataEnvio
-- status
-- mensagem
+class AvaliacaoFisica {
+ - idAvaliacao: 
+ - data: 
+ - peso: 
+ - imc: 
+ - percentualGordura: 
+ - observacoes: 
+ - anexo: 
+  
+ - calcularIMC(): 
+ - anexarArquivo(): 
+}
 
-***Instrutor***
-RF07, RF08
-- idInstrutor
-- nome
-- especialidade
+class Notificacao {
+ - idNotificacao: 
+ - tipo: 
+ - dataEnvio: 
+ - status: 
+ - mensagem: 
+  
+ - enviarNotificacao(): 
+ - marcarLida():
+}
 
-***Recepcionista***
-RF01, RF03
-- idRecepcionista
-- nome
+abstract class Funcionario {
+ - idFuncionario: 
+ - nome: 
+}
 
-***Gerente***
-RF02, RF09
-- idGerente
-- nome
+class Instrutor {
+ - especialidade: 
+  
+ - registrarPresenca(): 
+ - registrarAvaliacaoFisica(): 
+}
+
+class Recepcionista {
+ - cadastrarAluno(): 
+ - registrarPagamento(): 
+}
+
+class Gerente {
+ - emitirRelatorios(): 
+}
+
+- Funcionario <|-- Instrutor
+- Funcionario <|-- Recepcionista
+- Funcionario <|-- Gerente
+
+- Aluno "1" -- "1" Plano : contrata
+- Aluno "1" -- "0..*" Pagamento : realiza
+- Aluno "1" -- "0..*" Acesso : gera
+- Aluno "1" -- "0..*" Agendamento : realiza
+- Aluno "1" -- "0..*" Presenca : possui
+- Aluno "1" -- "0..*" AvaliacaoFisica : possui
+- Aluno "1" -- "0..*" Aula : participa
+- Aluno "1" -- "0..*" Notificacao : recebe
+
+- Aula "1" -- "0..*" Agendamento : possui
+- Aula "1" -- "0..*" Presenca : registra
+
+- Instrutor "1" -- "0..*" Aula : ministra
+- Instrutor "1" -- "0..*" AvaliacaoFisica : realiza
+- Instrutor "1" -- "0..*" Presenca : registra
+
+@enduml
